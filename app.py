@@ -18,22 +18,22 @@ class App(Tk):
 		self.eval('tk::PlaceWindow . center')
 		self.title('Replay Recorder')
 
-		# Установка окружения для ffmpeg и danser
+		# Set PATH to danser & ffmpeg
 		environ['PATH'] += f';{getcwd()}/ffmpeg;{getcwd()}/danser'
 
-		# Подгрузка конфига
+		# Config load
 		if not path.exists('./danser/settings/default.json'):
 			Popen('danser')
 		with open('./danser/settings/default.json', 'r') as f:
 			self.config = load(f)
 
-		# Создание основного фрейма для главного окна
+		# Creating main frame
 		container = Frame(self)
 		container.pack(side='top', fill='both', expand=True)
 		container.grid_rowconfigure(0, weight=1)
 		container.grid_columnconfigure(0, weight=1)
 
-		# Создадим фреймы для остальных окон, чтобы между ними можно было переключаться
+		# Create frames for other menus. This allows us to switch between them
 		self.frames = {}
 		for F in (MainMenu, PreSettings, Settings):
 			page_name = F.__name__
@@ -49,18 +49,18 @@ class App(Tk):
 	def is_dirs_valid(self):
 			if self.config['General']['OsuSongsDir']:
 				if not path.exists(self.config['General']['OsuSongsDir']):
-					print('Указан неверный путь до папки с песнями')
+					print('Wrong song directory')
 					return False
 			else:
-				print('Не указан путь до папки с песнями')
+				print('No path to songs directory')
 				return False
 
 			if self.config['General']['OsuSkinsDir']:
 				if not path.exists(self.config['General']['OsuSkinsDir']):
-					print('Указан неверный путь до папки со скинами')
+					print('Wrong path to skins directory')
 					return False
 			else:
-				print('Не указан путь до папки со скинами')
+				print('No path to skins directory')
 				return False
 			return True 
 
@@ -69,7 +69,7 @@ class App(Tk):
 			dump(self.config, f)
 
 	def show_frame(self, page_name):
-		'''Показывает фрейм по его имени'''
+		'''Shows frame by its name'''
 		frame = self.frames[page_name]
 		frame.tkraise()
 

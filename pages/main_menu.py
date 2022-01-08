@@ -32,14 +32,14 @@ class MainMenu(Frame):
 									  -skin="{self.controller.skin_name.get()}" \
 									  -replay="{self.controller.replay_path}" \
 									  -record')
-		# Интерфейс для выбора реплея
+		# Interface to choose replay file
 		Label(self, text='Selected replay', width=20).grid(row=0, column=0)
 		replay = Entry(self, width=50, state='disabled')
 		replay.insert(END, self.controller.replay_path)
 		replay.grid(row=0, column=1)
 		Button(self, text='Choose replay', command=lambda: choose_replay(), width=20).grid(row=0, column=2)
 
-		# Интерфейс для выбора скина
+		# Interface to choose skin
 		Label(self, text='Selected skin', width=20).grid(row=1, column=0)
 		skin_list = ['default']
 		self.controller.skin_name.set(skin_list[0])

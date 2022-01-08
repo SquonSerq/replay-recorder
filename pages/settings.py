@@ -28,8 +28,8 @@ class Settings(Frame):
 
 		Button(self, text='Back', command=lambda: controller.show_frame('MainMenu'), width=20).grid(row=0, column=0)
 
-		# Если пути до папки с песнями или скинами не указан или указаны неверно
-		# Интерфейс для выбора папки песен
+		# If paths to songs or skins are not set or set incorrect
+		# Interface to choose songs folder
 		Label(self, text='OSU! Songs folder', width=20).grid(row=1, column=0)
 		songs_folder = Entry(self, width=50)
 		songs_folder.insert(END, self.controller.config['General']['OsuSongsDir'])
@@ -37,7 +37,7 @@ class Settings(Frame):
 		songs_folder.grid(row=1, column=1)
 		Button(self, text='Choose', command=lambda: choose_songs_dir(), width=20).grid(row=1, column=2)
 
-		# Интерфейс для выбора папки скинов
+		# Interface to choose skins folder
 		Label(self, text='OSU! Skins folder', width=20).grid(row=2, column=0)
 		skin_folder = Entry(self, width=50)
 		skin_folder.insert(END, self.controller.config['General']['OsuSkinsDir'])

@@ -25,13 +25,13 @@ class PreSettings(Frame):
 				skin_folder.config(state='readonly')
 
 		def go_main_menu():
-			# Если с путями все ок - запишем и переходим в основное меню
+			# If everything is alright, write and get back to main menu
 			if self.controller.is_dirs_valid():
 				self.controller.save_config()
 				controller.show_frame('MainMenu')
 
-		# Если пути до папки с песнями или скинами не указан или указаны неверно
-		# Интерфейс для выбора папки песен
+		# If paths to songs or skins are not set or set incorrect
+		# Interface to choose songs folder
 		Label(self, text='OSU! Songs folder', width=20).grid(row=0, column=0)
 		songs_folder = Entry(self, width=50)
 		songs_folder.insert(END, self.controller.config['General']['OsuSongsDir'])
@@ -39,7 +39,7 @@ class PreSettings(Frame):
 		songs_folder.grid(row=0, column=1)
 		Button(self, text='Choose', command=lambda: choose_songs_dir(), width=20).grid(row=0, column=2)
 
-		# Интерфейс для выбора папки скинов
+		# Interface to choose skins folder
 		Label(self, text='OSU! Skins folder', width=20).grid(row=1, column=0)
 		skin_folder = Entry(self, width=50)
 		skin_folder.insert(END, self.controller.config['General']['OsuSkinsDir'])
