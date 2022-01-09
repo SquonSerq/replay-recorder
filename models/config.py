@@ -1,10 +1,11 @@
 from tkinter import StringVar
-from json import load, dump
-from subprocess import Popen
 from os import path
+import subprocess
+import json
 
 class Config:
 	def __init__(self):
+		self.__is_config_exist = True
 		self.replay_path = ''
 		self.skin_name = StringVar()
 		self.danser_config = {}
@@ -29,11 +30,14 @@ class Config:
 
 	def load_config(self):
 		if not path.exists('./danser/settings/default.json'):
-			Popen('danser')
+			subprocess.call('danser')
+			self.__is_danser_config_loaded = False
 		with open('./danser/settings/default.json', 'r') as f:
-			self.danser_config = load(f)
+			self.danser_config = json.load(f)
 
 			if not self.__is_danser_config_loaded:
+				self.danser_config['General']['OsuSongsDir'] = ''
+				self.danser_config['General']['OsuSkinsDir'] = ''
 				self.danser_config['Skin']['Cursor']['UseSkinCursor'] = True
 				self.danser_config['Skin']['Cursor']['Scale'] = 0.5
 				self.danser_config['Skin']['UseColorsFromSkin'] = True
@@ -53,4 +57,4 @@ class Config:
 
 	def save_config(self):
 		with open('./danser/settings/default.json', 'w') as f:
-			dump(self.danser_config, f)
+			json.dump(self.danser_config, f, indent=4)

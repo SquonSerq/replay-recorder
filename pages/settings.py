@@ -25,8 +25,11 @@ class Settings(Frame):
 				skin_folder.insert(END, self.controller.config.danser_config['General']['OsuSkinsDir'])
 				skin_folder.config(state='readonly')
 
-
-		Button(self, text='Back', command=lambda: controller.show_frame('MainMenu'), width=20).grid(row=0, column=0)
+		def go_main_menu():
+			# If everything is alright, write and get back to main menu
+			if self.controller.config.is_dirs_valid():
+				self.controller.config.save_config()
+				controller.show_frame('MainMenu')
 
 		# If paths to songs or skins are not set or set incorrect
 		# Interface to choose songs folder
@@ -44,4 +47,4 @@ class Settings(Frame):
 		skin_folder.config(state='readonly')
 		skin_folder.grid(row=2, column=1)
 		Button(self, text='Choose', command=lambda: choose_skins_dir(), width=20).grid(row=2, column=2)
-		Button(self, text='Save', command=lambda: self.controller.save_config(), width=20).grid(row=3, column=0, columnspan=3)
+		Button(self, text='Save', command=lambda: go_main_menu(), width=20).grid(row=3, column=0, columnspan=3)
