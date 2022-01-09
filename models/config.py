@@ -62,7 +62,7 @@ class Config:
 		with open('./danser/settings/default.json', 'r') as f:
 			self.danser_config = json.load(f)
 
-			if not self.__is_danser_config_loaded:
+			if not self.__is_config_exist:
 				self.danser_config['General']['OsuSongsDir'] = ''
 				self.danser_config['General']['OsuSkinsDir'] = ''
 				self.danser_config['Skin']['Cursor']['UseSkinCursor'] = True
