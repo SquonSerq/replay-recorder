@@ -15,12 +15,6 @@ To run this project, you should have Python3 installed.
 Download [danser-go](https://github.com/Wieku/danser-go/releases) and [FFmpeg](https://www.ffmpeg.org/download.html#build-windows) then unpack this programms to their directories in repo.
 >python app.py
 
-or
-
-> python3 app.py
-
-should work.
-
 ## Contributing  
 
 This project is open for contributing. Solve issues, create pull-requests and we will look at them.
