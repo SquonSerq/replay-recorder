@@ -1,7 +1,7 @@
 {
 	"General": {
-		"OsuSongsDir": "",
-		"OsuSkinsDir": "",
+		"OsuSongsDir": "D:/osu!/Songs",
+		"OsuSkinsDir": "D:/osu!/Skins",
 		"DiscordPresenceOn": true,
 		"UnpackOszFiles": true
 	},
@@ -179,7 +179,7 @@
 			"AdditionalSpacing": 0
 		},
 		"Boundaries": {
-			"Enabled": true,
+			"Enabled": false,
 			"BorderThickness": 1,
 			"BorderFill": 1,
 			"BorderColor": {
@@ -207,11 +207,11 @@
 	"Skin": {
 		"CurrentSkin": "default",
 		"FallbackSkin": "default",
-		"UseColorsFromSkin": false,
+		"UseColorsFromSkin": true,
 		"UseBeatmapColors": false,
 		"Cursor": {
-			"UseSkinCursor": false,
-			"Scale": 1,
+			"UseSkinCursor": true,
+			"Scale": 0.5,
 			"TrailScale": 1,
 			"ForceLongTrail": false,
 			"LongTrailLength": 2048,
@@ -223,7 +223,7 @@
 		"Style23Speed": 0.18,
 		"Style4Shift": 0.5,
 		"Colors": {
-			"EnableRainbow": true,
+			"EnableRainbow": false,
 			"RainbowSpeed": 8,
 			"BaseColor": {
 				"Hue": 0,
@@ -241,7 +241,7 @@
 		"EnableCustomTrailGlowOffset": true,
 		"TrailGlowOffset": -36,
 		"ScaleToCS": false,
-		"CursorSize": 18,
+		"CursorSize": 12,
 		"CursorExpand": false,
 		"ScaleToTheBeat": false,
 		"ShowCursorsOnBreaks": true,
@@ -254,7 +254,7 @@
 		"GlowEndScale": 0.4,
 		"InnerLengthMult": 0.9,
 		"AdditiveBlending": true,
-		"CursorRipples": true,
+		"CursorRipples": false,
 		"SmokeEnabled": true
 	},
 	"Objects": {
@@ -288,7 +288,7 @@
 			"MandalaTexturesTrigger": 5,
 			"MandalaTexturesAlpha": 0.3,
 			"Color": {
-				"EnableRainbow": true,
+				"EnableRainbow": false,
 				"RainbowSpeed": 8,
 				"BaseColor": {
 					"Hue": 0,
@@ -300,7 +300,7 @@
 				"FlashToTheBeat": false,
 				"FlashAmplitude": 100
 			},
-			"UseComboColors": false,
+			"UseComboColors": true,
 			"ComboColors": [
 				{
 					"Hue": 0,
@@ -308,7 +308,7 @@
 					"Value": 1
 				}
 			],
-			"UseSkinComboColors": false,
+			"UseSkinComboColors": true,
 			"UseBeatmapComboColors": false,
 			"Sliders": {
 				"WhiteScorePoints": true,
@@ -367,11 +367,11 @@
 		"LeadInHold": 2,
 		"FadeOutTime": 5,
 		"SeizureWarning": {
-			"Enabled": true,
+			"Enabled": false,
 			"Duration": 5
 		},
 		"Background": {
-			"LoadStoryboards": true,
+			"LoadStoryboards": false,
 			"LoadVideos": false,
 			"FlashToTheBeat": false,
 			"Dim": {
@@ -380,7 +380,7 @@
 				"Breaks": 0.5
 			},
 			"Parallax": {
-				"Amount": 0.1,
+				"Amount": 0,
 				"Speed": 0.5
 			},
 			"Blur": {

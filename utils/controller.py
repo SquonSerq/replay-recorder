@@ -6,7 +6,6 @@ class Controller():
 	def __init__(self, container):
 
 		self.config = Config()
-		self.config.load_config()
 
 		# Create frames for other menus. This allows us to switch between them
 		self.frames = {}

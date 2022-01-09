@@ -1,4 +1,4 @@
-from tkinter import Button, END, Entry, filedialog, Frame, Label
+from tkinter import Button, END, Checkbutton, Entry, filedialog, Frame, Label
 
 
 class Settings(Frame):
@@ -48,3 +48,12 @@ class Settings(Frame):
 		skin_folder.grid(row=2, column=1)
 		Button(self, text='Choose', command=lambda: choose_skins_dir(), width=20).grid(row=2, column=2)
 		Button(self, text='Save', command=lambda: go_main_menu(), width=20).grid(row=3, column=0, columnspan=3)
+
+		i = 0
+		for k, v in self.controller.config.settings_vars.items():
+			root = v["root"]
+			field = v["field"]
+			Checkbutton(self, text=v["frame_name"],
+			variable=v["obj"],
+			command=lambda: self.controller.config.update_from_frame(v["obj"], root, field)).grid(row=4+i, column=0)
+			i+=1
