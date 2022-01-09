@@ -1,6 +1,5 @@
 from models.config import Config
 from pages.main_menu import MainMenu
-from pages.pre_settings import PreSettings
 from pages.settings import Settings
 
 class Controller():
@@ -11,7 +10,7 @@ class Controller():
 
 		# Create frames for other menus. This allows us to switch between them
 		self.frames = {}
-		for F in (MainMenu, PreSettings, Settings):
+		for F in (MainMenu, Settings):
 			page_name = F.__name__
 			frame = F(parent=container, controller=self)
 			self.frames[page_name] = frame
@@ -20,7 +19,7 @@ class Controller():
 		if self.config.is_dirs_valid():
 			self.show_frame('MainMenu')
 		else:
-			self.show_frame('PreSettings')
+			self.show_frame('Settings')
 
 	def show_frame(self, page_name):
 		'''Shows frame by its name'''
