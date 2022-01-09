@@ -19,7 +19,7 @@ class MainMenu(Frame):
 				replay.config(state='disabled')
 		
 		def update_skin_selector(event):
-			if self.controller.is_dirs_valid():
+			if self.controller.config.is_dirs_valid():
 				skin_selector['menu'].delete(0, 'end')
 				for item in listdir(self.controller.config.danser_config['General']['OsuSkinsDir']):
 					skin_selector['menu'].add_command(label=item, command=_setit(self.controller.config.skin_name, item))
