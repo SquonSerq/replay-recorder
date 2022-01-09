@@ -5,7 +5,7 @@ import json
 
 class Config:
 	def __init__(self):
-		self.__is_danser_config_loaded = True
+		self.__is_config_exist = True
 		self.replay_path = ''
 		self.skin_name = StringVar()
 		self.danser_config = {}
