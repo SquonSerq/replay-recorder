@@ -31,7 +31,7 @@ class Config:
 	def load_config(self):
 		if not path.exists('./danser/settings/default.json'):
 			subprocess.call('danser')
-			self.__is_danser_config_loaded = False
+			self.__is_config_exist = False
 		with open('./danser/settings/default.json', 'r') as f:
 			self.danser_config = json.load(f)
 
@@ -53,7 +53,7 @@ class Config:
 				self.danser_config['Playfield']['Background']['Parallax']['Amount'] = 0
 				self.danser_config['Playfield']['Background']['LoadStoryboards'] = False
 				self.save_config()
-				self.__is_danser_config_loaded = True
+				self.__is_config_exist = True
 
 	def save_config(self):
 		with open('./danser/settings/default.json', 'w') as f:
