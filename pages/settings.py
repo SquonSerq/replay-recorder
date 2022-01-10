@@ -58,5 +58,5 @@ class Settings(Frame):
 			variable=v["obj"],
 			width=20,
 			anchor='w',
-			command=lambda: self.controller.config.update_from_frame(v["obj"], root, field)).grid(row=4+row_num, column=0)
+			command=lambda frame_var=v["obj"], root=root, field=field: self.controller.config.update_from_frame(frame_var, root, field)).grid(row=4+row_num, column=0)
 			row_num+=1
