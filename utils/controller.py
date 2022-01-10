@@ -60,8 +60,6 @@ class Controller():
 			out = p.stdout.readline()
 			print(out)
 			out_text.set(out)
-			if "Finished" in str(out):
-				break
 			new_window.update()
 			
 		new_window.destroy()
