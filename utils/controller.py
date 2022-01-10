@@ -53,7 +53,7 @@ class Controller():
 		p = Popen(f'danser -quickstart \
 			-skin="{self.config.skin_name.get()}" \
 			-replay="{self.config.replay_path}" \
-			-record', shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+			-record', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
 		# Create render output to tkinter window
 		out = 'start'
 		while not "Finished" in str(out):
