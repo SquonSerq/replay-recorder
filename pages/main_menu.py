@@ -6,6 +6,7 @@ class MainMenu(Frame):
 
 		Frame.__init__(self, parent)
 		self.controller = controller
+		self.window_size = (600, 85)
 
 		def choose_replay():
 			file = filedialog.askopenfile()

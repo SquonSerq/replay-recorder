@@ -6,6 +6,7 @@ class Settings(Frame):
 
 		Frame.__init__(self, parent)
 		self.controller = controller
+		self.window_size = (600, 230)
 		
 		def choose_songs_dir():
 			directory = filedialog.askdirectory()

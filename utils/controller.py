@@ -29,10 +29,7 @@ class Controller():
 	def show_frame(self, page_name):
 		'''Shows frame by its name'''
 		frame = self.frames[page_name]
-		if page_name == "Settings":
-			self.set_window_size(600, 230)
-		elif page_name == "MainMenu":
-			self.set_window_size(600, 85)
+		self.set_window_size(frame.window_size[0], frame.window_size[1])
 		frame.tkraise()
 
 	def render_video(self):
@@ -51,15 +48,15 @@ class Controller():
 		label.grid(row=0, column=0)
 		label.pack()
 
-		out_text.set("start")
-
 		new_window.tkraise()
 		new_window.update_idletasks()
 		p = Popen(f'danser -quickstart \
-									-skin="{self.config.skin_name.get()}" \
-									-replay="{self.config.replay_path}" \
-									-record', shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-		while True:
+			-skin="{self.config.skin_name.get()}" \
+			-replay="{self.config.replay_path}" \
+			-record', shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+		# Create render output to tkinter window
+		out = 'start'
+		while not "Finished" in str(out):
 			out = p.stdout.readline()
 			print(out)
 			out_text.set(out)
@@ -73,7 +70,7 @@ class Controller():
 		_str = "start danser\\videos"
 		os.system(_str)
 
-	def set_window_size(self, width: int, height: int):
+	def set_window_size(self, width, height):
 		self.app.geometry(f'{width}x{height}')
 		self.app.minsize(width, height)
 		self.app.maxsize(width, height)
