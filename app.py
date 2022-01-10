@@ -8,7 +8,7 @@ class App(Tk):
 	def __init__(self, *args, **kwargs):
 		Tk.__init__(self, *args, **kwargs)
 		
-		self.geometry('800x600+250+200')
+		self.geometry('600x100')
 		self.eval('tk::PlaceWindow . center')
 		self.title('Replay Recorder')
 
@@ -21,7 +21,7 @@ class App(Tk):
 		container.grid_rowconfigure(0, weight=1)
 		container.grid_columnconfigure(0, weight=1)
 
-		controller = Controller(container)
+		controller = Controller(container, self)
 
 
 if __name__ == "__main__":

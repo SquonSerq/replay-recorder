@@ -1,4 +1,4 @@
-from tkinter import StringVar
+from tkinter import StringVar, BooleanVar, IntVar
 from os import path
 import subprocess
 import json
@@ -9,6 +9,57 @@ class Config:
 		self.replay_path = ''
 		self.skin_name = StringVar()
 		self.danser_config = {}
+
+		self.load_config()
+
+		self.settings_vars = {
+			"SnakingIn": {
+				"setting_name": "Sliders snake in",
+				"type": BooleanVar,
+				"root": self.danser_config['Objects']['Sliders']['Snaking'],
+				"field": "In"
+			},
+			"SnakingOut": {
+				"setting_name": "Sliders snake out",
+				"type": BooleanVar,
+				"root": self.danser_config['Objects']['Sliders']['Snaking'],
+				"field": "Out"
+			},
+			"CursorRipples": {
+				"setting_name": "Waves on cursor click",
+				"type": BooleanVar,
+				"root": self.danser_config['Cursor'],
+				"field": "CursorRipples"
+			},
+			"ButtonClicks": {
+				"setting_name": "Show clicked buttons",
+				"type": BooleanVar,
+				"root": self.danser_config['Gameplay']['KeyOverlay'],
+				"field": "Show"
+			},
+			"StrainGraph": {
+				"setting_name": "Show strain graph",
+				"type": BooleanVar,
+				"root": self.danser_config['Gameplay']['StrainGraph'],
+				"field": "Show"
+			},
+			"PPCounter": {
+				"setting_name": "Show PP counter",
+				"type": BooleanVar,
+				"root": self.danser_config['Gameplay']['PPCounter'],
+				"field": "Show"
+			}
+		}
+
+		for k, v in self.settings_vars.items():
+			root = v["root"]
+			obj_type = v["type"]
+			field = v["field"]
+			v["obj"] = obj_type()
+			v["obj"].set(root[field])
+
+	def update_from_frame(self, frame_var, root, field):
+		root[field] = frame_var.get()
 
 	def is_dirs_valid(self):
 			if self.danser_config['General']['OsuSongsDir']:

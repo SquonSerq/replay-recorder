@@ -1,4 +1,4 @@
-from tkinter import Button, END, Entry, filedialog, Frame, Label
+from tkinter import Button, END, Checkbutton, Entry, filedialog, Frame, Label
 
 
 class Settings(Frame):
@@ -6,6 +6,7 @@ class Settings(Frame):
 
 		Frame.__init__(self, parent)
 		self.controller = controller
+		self.window_size = (620, 230)
 		
 		def choose_songs_dir():
 			directory = filedialog.askdirectory()
@@ -48,3 +49,14 @@ class Settings(Frame):
 		skin_folder.grid(row=2, column=1)
 		Button(self, text='Choose', command=lambda: choose_skins_dir(), width=20).grid(row=2, column=2)
 		Button(self, text='Save', command=lambda: go_main_menu(), width=20).grid(row=3, column=0, columnspan=3)
+
+		row_num = 0
+		for k, v in self.controller.config.settings_vars.items():
+			root = v["root"]
+			field = v["field"]
+			Checkbutton(self, text=v["setting_name"],
+			variable=v["obj"],
+			width=20,
+			anchor='w',
+			command=lambda: self.controller.config.update_from_frame(v["obj"], root, field)).grid(row=4+row_num, column=0)
+			row_num+=1
