@@ -49,11 +49,13 @@ class Settings(Frame):
 		Button(self, text='Choose', command=lambda: choose_skins_dir(), width=20).grid(row=2, column=2)
 		Button(self, text='Save', command=lambda: go_main_menu(), width=20).grid(row=3, column=0, columnspan=3)
 
-		i = 0
+		row_num = 0
 		for k, v in self.controller.config.settings_vars.items():
 			root = v["root"]
 			field = v["field"]
-			Checkbutton(self, text=v["frame_name"],
+			Checkbutton(self, text=v["setting_name"],
 			variable=v["obj"],
-			command=lambda: self.controller.config.update_from_frame(v["obj"], root, field)).grid(row=4+i, column=0)
-			i+=1
+			width=20,
+			anchor='w',
+			command=lambda: self.controller.config.update_from_frame(v["obj"], root, field)).grid(row=4+row_num, column=0)
+			row_num+=1

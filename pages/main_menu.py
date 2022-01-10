@@ -1,7 +1,5 @@
 from tkinter import Button, END, Entry, filedialog, Frame, Label, OptionMenu, _setit
-from subprocess import Popen
 from os import listdir
-
 
 class MainMenu(Frame):
 	def __init__(self, parent, controller):
@@ -24,14 +22,6 @@ class MainMenu(Frame):
 				for item in listdir(self.controller.config.danser_config['General']['OsuSkinsDir']):
 					skin_selector['menu'].add_command(label=item, command=_setit(self.controller.config.skin_name, item))
 
-		def render_video():
-			if not self.controller.config.replay_path:
-				print('Не выбран файл реплея')
-				return
-			Popen(f'danser -quickstart \
-									  -skin="{self.controller.config.skin_name.get()}" \
-									  -replay="{self.controller.config.replay_path}" \
-									  -record')
 		# Interface to choose replay file
 		Label(self, text='Selected replay', width=20).grid(row=0, column=0)
 		replay = Entry(self, width=50, state='disabled')
@@ -50,5 +40,6 @@ class MainMenu(Frame):
 		skin_selector.bind('<1>', update_skin_selector)
 		skin_selector.grid(row=1, column=1)
 
-		Button(self, text='Render video', command=lambda: render_video(), width=20).grid(row=2, column=0)
-		Button(self, text='Settings', command=lambda: controller.show_frame('Settings'), width=20).grid(row=3, column=2)
+		Button(self, text="Open videos folder", command=lambda: controller.open_videos_folder(), width=20).grid(row=2, column=0)
+		Button(self, text='Render video', command=lambda: controller.render_video(), width=20).grid(row=2, column=1)
+		Button(self, text='Settings', command=lambda: controller.show_frame('Settings'), width=20).grid(row=2, column=2)

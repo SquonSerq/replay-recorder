@@ -14,16 +14,40 @@ class Config:
 
 		self.settings_vars = {
 			"SnakingIn": {
-				"frame_name": "Sliders snake in",
+				"setting_name": "Sliders snake in",
 				"type": BooleanVar,
 				"root": self.danser_config['Objects']['Sliders']['Snaking'],
 				"field": "In"
 			},
 			"SnakingOut": {
-				"frame_name": "Sliders snake out",
+				"setting_name": "Sliders snake out",
 				"type": BooleanVar,
 				"root": self.danser_config['Objects']['Sliders']['Snaking'],
 				"field": "Out"
+			},
+			"CursorRipples": {
+				"setting_name": "Waves on cursor click",
+				"type": BooleanVar,
+				"root": self.danser_config['Cursor'],
+				"field": "CursorRipples"
+			},
+			"ButtonClicks": {
+				"setting_name": "Show clicked buttons",
+				"type": BooleanVar,
+				"root": self.danser_config['Gameplay']['KeyOverlay'],
+				"field": "Show"
+			},
+			"StrainGraph": {
+				"setting_name": "Show strain graph",
+				"type": BooleanVar,
+				"root": self.danser_config['Gameplay']['StrainGraph'],
+				"field": "Show"
+			},
+			"PPCounter": {
+				"setting_name": "Show PP counter",
+				"type": BooleanVar,
+				"root": self.danser_config['Gameplay']['PPCounter'],
+				"field": "Show"
 			}
 		}
 
