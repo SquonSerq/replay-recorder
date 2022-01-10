@@ -1,4 +1,6 @@
-from tkinter import Button, END, Checkbutton, Entry, filedialog, Frame, Label
+from tkinter import *
+from tkinter import filedialog
+from tkinter.ttk import *
 
 
 class Settings(Frame):
@@ -57,6 +59,5 @@ class Settings(Frame):
 			Checkbutton(self, text=v["setting_name"],
 			variable=v["obj"],
 			width=20,
-			anchor='w',
 			command=lambda frame_var=v["obj"], root=root, field=field: self.controller.config.update_from_frame(frame_var, root, field)).grid(row=4+row_num, column=0)
 			row_num+=1

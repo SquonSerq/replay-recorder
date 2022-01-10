@@ -1,7 +1,8 @@
+from tkinter import *
+from tkinter.ttk import *
 from subprocess import Popen
 import os
 import subprocess
-from tkinter import StringVar, Toplevel, Label
 
 from models.config import Config
 from pages.main_menu import MainMenu
@@ -39,30 +40,48 @@ class Controller():
 
 		# Create waiting window
 		new_window = Toplevel(self.app)
-		new_window.title("Video is rendering!")
 		new_window.geometry("600x400")
 		self.app.eval(f'tk::PlaceWindow {str(new_window)} center')
 
-		out_text = StringVar()
-		label = Label(new_window, textvariable=out_text, width=600)
-		label.grid(row=0, column=0)
-		label.pack()
+		stage_text = StringVar()
+		stage = Label(new_window, textvariable=stage_text, width=600)
+		stage.place(y=100)
+		stage.pack()
+
+		curr_map_text = StringVar()
+		curr_map = Label(new_window, textvariable=curr_map_text, width=600)
+		curr_map.place(y=150)
+		curr_map.pack()
+
+		progress_bar = ProgressBar(new_window, orient=HORIZONTAL, lenght=300)
+		progress_bar.place(y=200)
+		progress_bar.pack()
+
 
 		new_window.tkraise()
 		new_window.update_idletasks()
 		p = Popen(f'danser -quickstart \
 			-skin="{self.config.skin_name.get()}" \
 			-replay="{self.config.replay_path}" \
-			-record', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+			-record', shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
 		# Create render output to tkinter window
-		out = 'start'
-		while not "Finished" in str(out):
-			out = p.stdout.readline()
-			print(out)
-			out_text.set(out)
+		output = 'start'
+		while not 'Finished' in output:
+			output = str(p.stdout.readline())
+			if 'New beatmap found:' in output:
+				stage_text.set('Scanning for new maps')
+				curr_map_text.set(output[49:-8])
+			elif 'Imported:' in output:
+				stage_text.set(f'Importing new maps')
+				curr_map_text.set(output[49:-8])
+			elif 'Progress:' in output:
+				stage_text.set(f'Rendering video')
+				progress_bar['value'] = int(output[30:32])
+				curr_map.destroy()
+			print(output)
 			new_window.update()
-			
-		new_window.destroy()
+
+		stage_text.set(f'Finished')
 
 	def open_videos_folder(self):
 		_str = "start danser\\videos"

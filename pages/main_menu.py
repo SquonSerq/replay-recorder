@@ -1,4 +1,6 @@
-from tkinter import Button, END, Entry, filedialog, Frame, Label, OptionMenu, _setit
+from tkinter import *
+from tkinter import filedialog, _setit
+from tkinter.ttk import *
 from os import listdir
 
 class MainMenu(Frame):

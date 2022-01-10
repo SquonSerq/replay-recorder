@@ -1,4 +1,5 @@
-from tkinter import StringVar, BooleanVar, IntVar
+from tkinter import *
+from tkinter.ttk import *
 from os import path
 import subprocess
 import json
