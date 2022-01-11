@@ -1,9 +1,8 @@
 from tkinter import *
 from tkinter.ttk import *
 from tkinter.ttk import Progressbar as PB
-from subprocess import Popen
-import os
 import subprocess
+import os
 
 from models.config import Config
 from pages.main_menu import MainMenu
@@ -55,7 +54,7 @@ class Controller():
 
 		new_window.tkraise()
 		new_window.update_idletasks()
-		p = Popen(f'danser -quickstart \
+		p = subprocess.Popen(f'danser -quickstart \
 			-skin="{self.config.skin_name.get()}" \
 			-replay="{self.config.replay_path}" \
 			-record', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
