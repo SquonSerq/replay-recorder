@@ -1,7 +1,9 @@
-from subprocess import Popen
-import os
+from tkinter import *
+from tkinter.ttk import *
+from tkinter.ttk import Progressbar as PB
 import subprocess
-from tkinter import StringVar, Toplevel, Label
+import os
+import re
 
 from models.config import Config
 from pages.main_menu import MainMenu
@@ -9,7 +11,6 @@ from pages.settings import Settings
 
 class Controller():
 	def __init__(self, container, app_context):
-
 		self.config = Config()
 		self.app = app_context
 
@@ -39,30 +40,46 @@ class Controller():
 
 		# Create waiting window
 		new_window = Toplevel(self.app)
-		new_window.title("Video is rendering!")
-		new_window.geometry("600x400")
+		new_window.geometry("600x125")
 		self.app.eval(f'tk::PlaceWindow {str(new_window)} center')
 
-		out_text = StringVar()
-		label = Label(new_window, textvariable=out_text, width=600)
-		label.grid(row=0, column=0)
-		label.pack()
+		stage = Label(new_window, text='Starting')
+		stage.place(x=25, y=10)
+
+		curr_map = Label(new_window, text='', width=580)
+		curr_map.place(x=25, y=30)
+
+		progress_bar = PB(new_window, orient=HORIZONTAL, length=550, value=0, maximum=100)
+		progress_bar.place(x=25, y=60)
 
 		new_window.tkraise()
 		new_window.update_idletasks()
-		p = Popen(f'danser -quickstart \
+		p = subprocess.Popen(f'danser -quickstart \
 			-skin="{self.config.skin_name.get()}" \
 			-replay="{self.config.replay_path}" \
 			-record', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+		
 		# Create render output to tkinter window
-		out = 'start'
-		while not "Finished" in str(out):
-			out = p.stdout.readline()
-			print(out)
-			out_text.set(out)
+		output = 'Starting'
+		while not 'Finished!' in output:
+			output = str(p.stdout.readline())
+			if 'New beatmap found:' in output:
+				stage.config(text='Scanning for new maps')
+				curr_map.config(text=output[58:-1])
+			elif 'Imported:' in output:
+				stage.config(text='Importing new maps')
+				curr_map.config(text=output[49:-8])
+			elif 'Progress:' in output:
+				stage.config(text='Rendering video')
+				progress_bar['value'] = int(re.search("Progress: ([0-9]*)%", output).group(1))
+				curr_map.config(text='')
+			elif 'Finished!' in output:
+				stage.config(text='Finished')	
+
+			print(output)
 			new_window.update()
-			
-		new_window.destroy()
+
+		Button(new_window, text='OK', command=lambda: new_window.destroy(), width=20).place(x=245, y=90)
 
 	def open_videos_folder(self):
 		_str = "start danser\\videos"

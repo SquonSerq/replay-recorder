@@ -1,5 +1,6 @@
-from tkinter import Frame, Tk
-from os import environ, getcwd, path
+from tkinter import *
+from tkinter.ttk import *
+from os import environ, getcwd
 
 from utils.controller import Controller
 
