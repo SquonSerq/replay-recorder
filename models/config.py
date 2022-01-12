@@ -5,13 +5,16 @@ import subprocess
 import json
 
 class Config:
-	def __init__(self):
+	def __init__(self, controller_context):
+		self.controller = controller_context
 		self.__is_config_exist = True
+		self.is_db_loading = False
 		self.replay_path = ''
 		self.skin_name = StringVar()
 		self.danser_config = {}
 
 		self.load_config()
+		self.controller.app.after(100, self.load_database)
 
 		self.settings_vars = {
 			"SnakingIn": {
@@ -80,10 +83,41 @@ class Config:
 				return False
 			return True 
 
+	def load_database(self):
+		self.is_db_loading = True
+		p = subprocess.Popen(f'danser -md5 0', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+
+		# Create db import window
+		new_window = Toplevel(self.controller.app)
+		new_window.title("Importing maps to database")
+		new_window.geometry("600x50")
+		# self.controller.app.eval(f'tk::PlaceWindow {str(new_window)} center')
+
+		stage = Label(new_window, text='Starting')
+		stage.place(x=25, y=10)
+
+		curr_map = Label(new_window, text='', width=580)
+		curr_map.place(x=25, y=30)
+
+		new_window.tkraise()
+		new_window.update_idletasks()
+		output = 'Starting'
+		while not "Insert complete" in output:
+			output = str(p.stdout.readline())
+			print(output)
+			stage.config(text='Importing new maps. Window will close automatically when import finish.')
+			curr_map.config(text=output[58:-8])
+			self.controller.app.update()
+			
+		self.is_db_loading = False
+		new_window.destroy()
+
+
 	def load_config(self):
 		if not path.exists('./danser/settings/default.json'):
-			subprocess.call('danser')
-			self.__is_config_exist = False
+			subprocess.call("danser")
+
+				
 		with open('./danser/settings/default.json', 'r') as f:
 			self.danser_config = json.load(f)
 

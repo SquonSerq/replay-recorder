@@ -1,9 +1,11 @@
 from tkinter import *
 from tkinter.ttk import *
+from tkinter import messagebox
 from tkinter.ttk import Progressbar as PB
 import subprocess
 import os
 import re
+import threading
 
 from models.config import Config
 from pages.main_menu import MainMenu
@@ -11,8 +13,8 @@ from pages.settings import Settings
 
 class Controller():
 	def __init__(self, container, app_context):
-		self.config = Config()
 		self.app = app_context
+		self.config = Config(self)
 
 		# Create frames for other menus. This allows us to switch between them
 		self.frames = {}
@@ -34,6 +36,9 @@ class Controller():
 		frame.tkraise()
 
 	def render_video(self):
+		if self.config.is_db_loading:
+			messagebox.showwarning(title="Warning!", message="Wait for maps to import to database before rendering!\nClose this window to continue import.")
+			return
 		if not self.config.replay_path:
 			print('No replay file')
 			return
@@ -79,7 +84,7 @@ class Controller():
 			print(output)
 			new_window.update()
 
-		Button(new_window, text='OK', command=lambda: new_window.destroy(), width=20).place(x=245, y=90)
+		new_window.destroy()
 
 	def open_videos_folder(self):
 		_str = "start danser\\videos"
