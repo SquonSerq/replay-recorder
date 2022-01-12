@@ -3,6 +3,7 @@ from tkinter.ttk import *
 from tkinter.ttk import Progressbar as PB
 import subprocess
 import os
+import re
 
 from models.config import Config
 from pages.main_menu import MainMenu
@@ -10,7 +11,6 @@ from pages.settings import Settings
 
 class Controller():
 	def __init__(self, container, app_context):
-
 		self.config = Config()
 		self.app = app_context
 
@@ -58,6 +58,7 @@ class Controller():
 			-skin="{self.config.skin_name.get()}" \
 			-replay="{self.config.replay_path}" \
 			-record', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+		
 		# Create render output to tkinter window
 		output = 'Starting'
 		while not 'Finished!' in output:
@@ -70,7 +71,7 @@ class Controller():
 				curr_map.config(text=output[49:-8])
 			elif 'Progress:' in output:
 				stage.config(text='Rendering video')
-				progress_bar['value']+=5
+				progress_bar['value'] = int(re.search("Progress: ([0-9]*)%", output).group(1))
 				curr_map.config(text='')
 			elif 'Finished!' in output:
 				stage.config(text='Finished')	
@@ -78,7 +79,6 @@ class Controller():
 			print(output)
 			new_window.update()
 
-		p.terminate()
 		Button(new_window, text='OK', command=lambda: new_window.destroy(), width=20).place(x=245, y=90)
 
 	def open_videos_folder(self):
