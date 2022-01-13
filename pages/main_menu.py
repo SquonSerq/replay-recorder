@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from os import listdir
+
 from utils.colors import *
 
 
@@ -27,12 +28,12 @@ class MainMenu(ttk.Frame):
 		top_menu = tk.Frame(self, height=100)
 		top_menu.pack(side=tk.TOP, fill=tk.X)
 
-		top_menu_settings = tk.Frame(top_menu, bg=not_quite_black, height=20)
+		top_menu_settings = tk.Frame(top_menu, height=20, **frame_nqb_bg_style)
 		top_menu_settings.pack(side=tk.TOP, fill=tk.X)
 		top_menu_settings.pack_propagate(0)
-		tk.Button(top_menu_settings, text='Settings', command=lambda: controller.show_frame('Settings'), width=20, background=blueple, fg=white, borderwidth=0).pack(side=tk.RIGHT)
+		tk.Button(top_menu_settings, text='Settings', command=lambda: controller.show_frame('Settings'), **button_style).pack(side=tk.RIGHT)
 
-		top_menu_skin = tk.Frame(top_menu, bg=dark_gray, height=80)
+		top_menu_skin = tk.Frame(top_menu,  height=80, **frame_db_bg_style)
 		top_menu_skin.pack(side=tk.TOP, fill=tk.X)
 		top_menu_skin.pack_propagate(0)
 		tk.Label(top_menu_skin, text='Selected skin', width=20).pack(side=tk.LEFT, padx="25")
@@ -51,14 +52,14 @@ class MainMenu(ttk.Frame):
 		middle_frame = tk.Frame(self, height=500)
 		middle_frame.pack(side=tk.TOP, fill=tk.X)
 
-		middle_frame_settings = tk.Frame(middle_frame, bg=not_quite_black, height=20)
+		middle_frame_settings = tk.Frame(middle_frame, height=20, **frame_nqb_bg_style)
 		middle_frame_settings.pack(side=tk.TOP, fill=tk.X)
 		middle_frame_settings.pack_propagate(0)
 		middle_frame_settings.columnconfigure((0, 1, 2), weight=1)
-		tk.Button(middle_frame_settings, text='Add replay', command=lambda: choose_replay(), width=20, background=blueple, fg=white, borderwidth=0).grid(row=0, column=0)
-		tk.Button(middle_frame_settings, text='Render video', command=lambda: controller.render_video(), width=20, background=blueple, fg=white, borderwidth=0).grid(row=0, column=1)
-		tk.Button(middle_frame_settings, text="Open videos folder", command=lambda: controller.open_videos_folder(), width=20, background=blueple, fg=white, borderwidth=0).grid(row=0, column=2)
+		tk.Button(middle_frame_settings, text='Add replay', command=lambda: choose_replay(), **button_style).grid(row=0, column=0)
+		tk.Button(middle_frame_settings, text='Render video', command=lambda: controller.render_video(), **button_style).grid(row=0, column=1)
+		tk.Button(middle_frame_settings, text="Open videos folder", command=lambda: controller.open_videos_folder(), **button_style).grid(row=0, column=2)
 		
-		replays_frame = tk.Frame(middle_frame, bg=dark_gray, height=480)
+		replays_frame = tk.Frame(middle_frame, height=480, **frame_db_bg_style)
 		replays_frame.pack(side=tk.TOP, fill=tk.X)
 		middle_frame_settings.pack_propagate(0)
