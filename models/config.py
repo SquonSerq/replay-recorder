@@ -116,7 +116,7 @@ class Config:
 	def load_config(self):
 		if not path.exists('./danser/settings/default.json'):
 			subprocess.call("danser")
-
+			self.__is_config_exist = False
 				
 		with open('./danser/settings/default.json', 'r') as f:
 			self.danser_config = json.load(f)
