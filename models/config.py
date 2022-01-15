@@ -3,6 +3,10 @@ from tkinter.ttk import *
 from os import path
 import subprocess
 import json
+import threading
+from queue import Queue, Empty
+
+from utils.read_queue import enqueue_output
 
 class Config:
 	def __init__(self, controller_context):
@@ -85,13 +89,11 @@ class Config:
 
 	def load_database(self):
 		self.is_db_loading = True
-		p = subprocess.Popen(f'danser -md5 0', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
 
 		# Create db import window
 		new_window = Toplevel(self.controller.app)
 		new_window.title("Importing maps to database")
 		new_window.geometry("600x50")
-		# self.controller.app.eval(f'tk::PlaceWindow {str(new_window)} center')
 
 		stage = Label(new_window, text='Starting')
 		stage.place(x=25, y=10)
@@ -101,12 +103,23 @@ class Config:
 
 		new_window.tkraise()
 		new_window.update_idletasks()
+
+		p = subprocess.Popen(f'danser -md5 0', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+
+		q = Queue()
+		t = threading.Thread(target=enqueue_output, args=(p.stdout, q))
+		t.daemon = True
+		t.start()
+
 		output = 'Starting'
-		while not "Insert complete" in output:
-			output = str(p.stdout.readline())
-			print(output)
-			stage.config(text='Importing new maps. Window will close automatically when import finish.')
-			curr_map.config(text=output[58:-8])
+		while not "Insert complete" or not "Beatmap not found" in output:
+			try: output = str(q.get_nowait())
+			except Empty:
+				e = 0
+			else:
+				print(output)
+				stage.config(text='Importing new maps. Window will close automatically when import finish.')
+				curr_map.config(text=output[58:-8])
 			self.controller.app.update()
 			
 		self.is_db_loading = False
