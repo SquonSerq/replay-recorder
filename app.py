@@ -21,7 +21,7 @@ class App(tk.Tk):
 		top_bar.pack(side=tk.TOP, fill=tk.X)
 		self.make_draggable(top_bar)
 
-		app_name = tk.Label(top_bar, text='Replay Recorder', **frame_lg_bg_style, fg=light_white)
+		app_name = tk.Label(top_bar, text='Replay Recorder', **label_lg_bg_style)
 		app_name.pack(side=tk.LEFT, padx=10)
 
 		close_button = tk.Button(top_bar, text='✕', command=self.quit, **button_titlebar_style)

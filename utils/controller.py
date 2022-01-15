@@ -10,12 +10,14 @@ import threading
 from models.config import Config
 from pages.main_menu import MainMenu
 from pages.settings import Settings
+from utils.db_controller import Db
 from utils.read_queue import enqueue_output
 
 class Controller():
 	def __init__(self, container, app_context):
 		self.app = app_context
 		self.config = Config(self)
+		self.db = Db()
 
 		# Create frames for other menus. This allows us to switch between them
 		self.frames = {}
@@ -35,6 +37,9 @@ class Controller():
 		frame = self.frames[page_name]
 		self.set_window_size(frame.window_size[0], frame.window_size[1])
 		frame.tkraise()
+
+	def get_beatmap_data(self, beatmap_hash):
+		return self.db.get_beatmap_data(beatmap_hash)
 
 	def render_video(self):
 		if self.config.is_db_loading:
