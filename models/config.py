@@ -1,5 +1,5 @@
-from tkinter import *
-from tkinter.ttk import *
+import tkinter as tk
+import tkinter.ttk as ttk
 from os import path
 import subprocess
 import json
@@ -10,7 +10,7 @@ class Config:
 		self.__is_config_exist = True
 		self.is_db_loading = False
 		self.replay_path = ''
-		self.skin_name = StringVar()
+		self.skin_name = tk.StringVar()
 		self.danser_config = {}
 
 		self.load_config()
@@ -19,37 +19,37 @@ class Config:
 		self.settings_vars = {
 			"SnakingIn": {
 				"setting_name": "Sliders snake in",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Objects']['Sliders']['Snaking'],
 				"field": "In"
 			},
 			"SnakingOut": {
 				"setting_name": "Sliders snake out",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Objects']['Sliders']['Snaking'],
 				"field": "Out"
 			},
 			"CursorRipples": {
 				"setting_name": "Waves on cursor click",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Cursor'],
 				"field": "CursorRipples"
 			},
 			"ButtonClicks": {
 				"setting_name": "Show clicked buttons",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Gameplay']['KeyOverlay'],
 				"field": "Show"
 			},
 			"StrainGraph": {
 				"setting_name": "Show strain graph",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Gameplay']['StrainGraph'],
 				"field": "Show"
 			},
 			"PPCounter": {
 				"setting_name": "Show PP counter",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Gameplay']['PPCounter'],
 				"field": "Show"
 			}
@@ -88,15 +88,15 @@ class Config:
 		p = subprocess.Popen(f'danser -md5 0', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
 
 		# Create db import window
-		new_window = Toplevel(self.controller.app)
+		new_window = tk.Toplevel(self.controller.app)
 		new_window.title("Importing maps to database")
 		new_window.geometry("600x50")
 		# self.controller.app.eval(f'tk::PlaceWindow {str(new_window)} center')
 
-		stage = Label(new_window, text='Starting')
+		stage = tk.Label(new_window, text='Starting')
 		stage.place(x=25, y=10)
 
-		curr_map = Label(new_window, text='', width=580)
+		curr_map = tk.Label(new_window, text='', width=580)
 		curr_map.place(x=25, y=30)
 
 		new_window.tkraise()

@@ -1,11 +1,9 @@
-from tkinter import *
-from tkinter.ttk import *
-from tkinter import messagebox
-from tkinter.ttk import Progressbar as PB
+import tkinter as tk
+import tkinter.messagebox as mb
+import tkinter.ttk as ttk
 import subprocess
 import os
 import re
-import threading
 
 from models.config import Config
 from pages.main_menu import MainMenu
@@ -37,24 +35,24 @@ class Controller():
 
 	def render_video(self):
 		if self.config.is_db_loading:
-			messagebox.showwarning(title="Warning!", message="Wait for maps to import to database before rendering!\nClose this window to continue import.")
+			mb.showwarning(title="Warning!", message="Wait for maps to import to database before rendering!\nClose this window to continue import.")
 			return
 		if not self.config.replay_path:
 			print('No replay file')
 			return
 
 		# Create waiting window
-		new_window = Toplevel(self.app)
+		new_window = tk.Toplevel(self.app)
 		new_window.geometry("600x125")
 		self.app.eval(f'tk::PlaceWindow {str(new_window)} center')
 
-		stage = Label(new_window, text='Starting')
+		stage = tk.Label(new_window, text='Starting')
 		stage.place(x=25, y=10)
 
-		curr_map = Label(new_window, text='', width=580)
+		curr_map = tk.Label(new_window, text='', width=580)
 		curr_map.place(x=25, y=30)
 
-		progress_bar = PB(new_window, orient=HORIZONTAL, length=550, value=0, maximum=100)
+		progress_bar = ttk.Progressbar(new_window, orient=tk.HORIZONTAL, length=550, value=0, maximum=100)
 		progress_bar.place(x=25, y=60)
 
 		new_window.tkraise()
