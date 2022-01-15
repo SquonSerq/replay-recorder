@@ -4,10 +4,13 @@ import tkinter.ttk as ttk
 import subprocess
 import os
 import re
+from queue import Queue, Empty
+import threading
 
 from models.config import Config
 from pages.main_menu import MainMenu
 from pages.settings import Settings
+from utils.read_queue import enqueue_output
 
 class Controller():
 	def __init__(self, container, app_context):
@@ -57,29 +60,40 @@ class Controller():
 
 		new_window.tkraise()
 		new_window.update_idletasks()
+
+		# Start render as subprocess and read it async.
 		p = subprocess.Popen(f'danser -quickstart \
 			-skin="{self.config.skin_name.get()}" \
 			-replay="{self.config.replay_path}" \
 			-record', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
+
+		q = Queue()
+		t = threading.Thread(target=enqueue_output, args=(p.stdout, q))
+		t.daemon = True
+		t.start()
 		
 		# Create render output to tkinter window
 		output = 'Starting'
 		while not 'Finished!' in output:
-			output = str(p.stdout.readline())
-			if 'New beatmap found:' in output:
-				stage.config(text='Scanning for new maps')
-				curr_map.config(text=output[58:-1])
-			elif 'Imported:' in output:
-				stage.config(text='Importing new maps')
-				curr_map.config(text=output[49:-8])
-			elif 'Progress:' in output:
-				stage.config(text='Rendering video')
-				progress_bar['value'] = int(re.search("Progress: ([0-9]*)%", output).group(1))
-				curr_map.config(text='')
-			elif 'Finished!' in output:
-				stage.config(text='Finished')	
+			try:
+				output = str(q.get_nowait())
+			except Empty:
+				pass
+			else:
+				print(output)
+				if 'New beatmap found:' in output:
+					stage.config(text='Scanning for new maps')
+					curr_map.config(text=output[58:-1])
+				elif 'Imported:' in output:
+					stage.config(text='Importing new maps')
+					curr_map.config(text=output[49:-8])
+				elif 'Progress:' in output:
+					stage.config(text='Rendering video')
+					progress_bar['value'] = int(re.search("Progress: ([0-9]*)%", output).group(1))
+					curr_map.config(text='')
+				elif 'Finished!' in output:
+					stage.config(text='Finished')	
 
-			print(output)
 			new_window.update()
 
 		new_window.destroy()
