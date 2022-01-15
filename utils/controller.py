@@ -1,4 +1,3 @@
-from ast import arg
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import messagebox
@@ -77,9 +76,10 @@ class Controller():
 		# Create render output to tkinter window
 		output = 'Starting'
 		while not 'Finished!' in output:
-			try: output = str(q.get_nowait())
+			try:
+				output = str(q.get_nowait())
 			except Empty:
-				e = 0
+				pass
 			else:
 				print(output)
 				if 'New beatmap found:' in output:

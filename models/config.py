@@ -113,9 +113,10 @@ class Config:
 
 		output = 'Starting'
 		while not "Insert complete" or not "Beatmap not found" in output:
-			try: output = str(q.get_nowait())
+			try:
+				output = str(q.get_nowait())
 			except Empty:
-				e = 0
+				pass
 			else:
 				print(output)
 				stage.config(text='Importing new maps. Window will close automatically when import finish.')
