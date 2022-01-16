@@ -1,11 +1,11 @@
 import tkinter as tk
 import tkinter.filedialog as fd
 import tkinter.ttk as ttk
-from PIL import Image, ImageTk
 from osrparse import parse_replay_file
 from os import listdir
 
 from utils.colors import *
+from utils.image_loader import *
 
 
 class MainMenu(tk.Frame):
@@ -49,8 +49,8 @@ class MainMenu(tk.Frame):
 				map_info.pack(side=tk.TOP, fill=tk.X)
 				map_info.pack_propagate(0)
 				
-				image = Image.open('/'.join([self.controller.config.danser_config['General']['OsuSongsDir'], beatmap_data[3]]))
-				image_tk = ImageTk.PhotoImage(image.resize((160, 90)))
+				path = '/'.join([self.controller.config.danser_config['General']['OsuSongsDir'], beatmap_data[3]])
+				image_tk = ImageLoader(path).get_tkinter_image(160, 90)
 				print('Loaded image', self.controller.config.danser_config['General']['OsuSongsDir'] + beatmap_data[3])
 				photo = tk.Label(map_info, image=image_tk, **borderless)
 				photo.image = image_tk
