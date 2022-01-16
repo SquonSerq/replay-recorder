@@ -1,15 +1,18 @@
 import tkinter as tk
-import tkinter.dnd as dnd
 from os import environ, getcwd
+from ctypes import windll
 
 from utils.colors import *
 from utils.controller import Controller
+
+
 
 
 class App(tk.Tk):
 	def __init__(self, *args, **kwargs):
 		tk.Tk.__init__(self, *args, **kwargs)
 		self.overrideredirect(1)
+		self.after(10, lambda: self.set_appwindow())
 		self.geometry('800x600')
 		self.eval('tk::PlaceWindow . center')
 
@@ -36,6 +39,19 @@ class App(tk.Tk):
 		container.grid_columnconfigure(0, weight=1)
 
 		controller = Controller(container, self)
+
+	def set_appwindow(self):
+		# Adds root window to task bar
+		GWL_EXSTYLE=-20
+		WS_EX_TOOLWINDOW=0x00000080
+
+		hwnd = windll.user32.GetParent(self.winfo_id())
+		style = windll.user32.GetWindowLongW(hwnd, GWL_EXSTYLE)
+		style = style & ~WS_EX_TOOLWINDOW
+		windll.user32.SetWindowLongW(hwnd, GWL_EXSTYLE, style)
+
+		self.wm_withdraw()
+		self.after(10, lambda: self.wm_deiconify())
 
 	def make_draggable(self, object):
 		object.bind("<Button-1>", self.on_drag_start)
