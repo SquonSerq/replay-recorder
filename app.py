@@ -3,6 +3,7 @@ from tkinter.ttk import *
 from os import environ, getcwd
 
 from utils.controller import Controller
+from utils.version_check import check_version
 
 
 class App(Tk):
@@ -26,5 +27,7 @@ class App(Tk):
 
 
 if __name__ == "__main__":
+	if not check_version():
+		print("You can download new version!")
 	app = App()
 	app.mainloop()
