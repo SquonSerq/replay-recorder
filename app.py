@@ -4,6 +4,7 @@ from ctypes import windll
 
 from utils.colors import *
 from utils.controller import Controller
+from utils.version_check import check_version
 
 
 class App(tk.Tk):
@@ -65,5 +66,7 @@ class App(tk.Tk):
 		self.geometry(f'+{x}+{y}')
 
 if __name__ == "__main__":
+	if not check_version():
+		print("You can download new version!")
 	app = App()
 	app.mainloop()
