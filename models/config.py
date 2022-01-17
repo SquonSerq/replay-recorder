@@ -13,8 +13,6 @@ class Config:
 		self.controller = controller_context
 		self.__is_config_exist = True
 		self.is_db_loading = False
-		self.replay_path = ''
-		self.skin_name = tk.StringVar()
 		self.danser_config = {}
 
 		self.load_config()

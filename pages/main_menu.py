@@ -57,7 +57,6 @@ class MainMenu(tk.Frame):
 				photo.pack(side=tk.TOP, pady=10)
 				tk.Label(map_info, text=f'Played by {replay_data.player_name} on {replay_data.timestamp}', **borderless, **label_dg_bg_style).pack(side=tk.BOTTOM, fill=tk.BOTH, pady=10)
 				tk.Label(map_info, text=f'{beatmap_data[0]} - {beatmap_data[1]} [{beatmap_data[2]}]', **borderless, **label_dg_bg_style).pack(side=tk.BOTTOM, fill=tk.BOTH)
-				
 
 				replay_popup_skin = tk.Frame(replay_popup,  height=50, **frame_lg_bg_style)
 				replay_popup_skin.pack(side=tk.TOP, fill=tk.X)
@@ -68,20 +67,38 @@ class MainMenu(tk.Frame):
 					if self.controller.config.is_dirs_valid():
 						skin_selector['menu'].delete(0, 'end')
 						for item in listdir(self.controller.config.danser_config['General']['OsuSkinsDir']):
-							skin_selector['menu'].add_command(label=item, command=tk._setit(self.controller.config.skin_name, item))
-
+							skin_selector['menu'].add_command(label=item, command=tk._setit(skin_name, item))
+				skin_name = tk.StringVar()
 				skin_list = ['default']
-				self.controller.config.skin_name.set(skin_list[0])
+				skin_name.set(skin_list[0])
 				if self.controller.config.is_dirs_valid():
 					for item in listdir(self.controller.config.danser_config['General']['OsuSkinsDir']):
 						skin_list.append(item)
 				
-				skin_selector = ttk.OptionMenu(replay_popup_skin, self.controller.config.skin_name, *skin_list)
+				skin_selector = ttk.OptionMenu(replay_popup_skin, skin_name, *skin_list)
 				skin_selector.bind('<1>', update_skin_selector)
 				skin_selector.pack(side=tk.LEFT)
-				tk.Button(replay_popup_skin, text='Render video', command=lambda: controller.render_video(), **button_style_popup).pack(side=tk.RIGHT, padx=25)
 
-				self.controller.config.replay_path = file.name
+				def add_replay_to_list():
+					q_frame = tk.Frame(q_replays_frame, width=740, height=100, **frame_lg_bg_style)
+					q_frame.pack(side=tk.TOP, pady=5)
+					q_frame.pack_propagate(0)
+
+					q_photo = tk.Label(q_frame, image=image_tk, **borderless)
+					q_photo.image = image_tk
+					q_photo.pack(side=tk.LEFT, anchor=tk.NW, padx=10, pady=10)
+
+					q_text_frame = tk.Frame(q_frame, **frame_lg_bg_style)
+					q_text_frame.pack(side=tk.LEFT, anchor=tk.NW, padx=5, pady=5)
+
+					tk.Label(q_text_frame, text=f'{beatmap_data[0]} - {beatmap_data[1]} [{beatmap_data[2]}]', **borderless, **label_lg_bg_style).pack(side=tk.TOP, anchor=tk.W, pady=10)
+					tk.Label(q_text_frame, text=f'Played by {replay_data.player_name} on {replay_data.timestamp}', **borderless, **label_lg_bg_style).pack(side=tk.TOP, anchor=tk.W, pady=10)
+					
+					ttk.Progressbar(q_frame, orient=tk.HORIZONTAL, value=0, maximum=100).pack(side=tk.RIGHT, anchor=tk.NW, padx=10, pady=15)
+					self.controller.add_replay_to_render(q_frame, file.name, skin_name.get())
+					replay_popup.destroy()
+
+				tk.Button(replay_popup_skin, text='Add replay', command=lambda: add_replay_to_list(), **button_style_popup).pack(side=tk.RIGHT, padx=25)
 		
 		# Frame for control buttons and render queue
 		background = tk.Frame(self, height=600, **frame_lg_bg_style)
@@ -96,5 +113,16 @@ class MainMenu(tk.Frame):
 		tk.Button(frame_with_buttons, text="Open videos folder", command=lambda: controller.open_videos_folder(), **button_style).pack(side=tk.LEFT, padx=1)
 		tk.Button(frame_with_buttons, text='Settings', command=lambda: controller.show_frame('Settings'), **button_style).pack(side=tk.LEFT, padx=1)
 
-		replays_frame = tk.Frame(background, height=500, **frame_lg_bg_style)
-		replays_frame.pack(side=tk.TOP, fill=tk.X)
+		replays_frame = tk.Frame(background, width=800, height=540,  **frame_lg_bg_style)
+		replays_frame.pack(side=tk.TOP)
+		replays_frame.pack_propagate(0)
+
+		q_replays_labels_frame = tk.Frame(replays_frame, height=30, **frame_lg_bg_style)
+		q_replays_labels_frame.pack(side=tk.TOP, fill=tk.X)
+		q_replays_labels_frame.pack_propagate(0) 
+		tk.Label(q_replays_labels_frame, text='Selected replays', **label_lg_bg_style).pack(side=tk.LEFT, anchor=tk.N, padx=35, pady=5)
+		tk.Label(q_replays_labels_frame, text='Render progress', **label_lg_bg_style).pack(side=tk.RIGHT, anchor=tk.N, padx=45, pady=5)
+
+		q_replays_frame = tk.Frame(replays_frame, width=750, height=450, **frame_dg_bg_style) 
+		q_replays_frame.pack(side=tk.TOP, anchor=tk.CENTER)
+		q_replays_frame.pack_propagate(0)

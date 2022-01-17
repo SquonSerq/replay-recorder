@@ -1,23 +1,29 @@
 import tkinter as tk
 import tkinter.messagebox as mb
 import tkinter.ttk as ttk
-import subprocess
+import queue
 import os
 import re
-from queue import Queue, Empty
-import threading
 
 from models.config import Config
 from pages.main_menu import MainMenu
 from pages.settings import Settings
 from utils.db_controller import Db
-from utils.read_queue import enqueue_output
+from utils.read_queue import Render
+
 
 class Controller():
 	def __init__(self, container, app_context):
 		self.app = app_context
 		self.config = Config(self)
 		self.db = Db()
+
+		self.render_list = []
+		self.render_queue = queue.Queue()
+		self.output_queue = queue.Queue()
+		self.render = Render(self.render_queue, self.output_queue)
+		self.render.daemon = True
+		self.render.start()
 
 		# Create frames for other menus. This allows us to switch between them
 		self.frames = {}
@@ -41,67 +47,24 @@ class Controller():
 	def get_beatmap_data(self, beatmap_hash):
 		return self.db.get_beatmap_data(beatmap_hash)
 
+	def add_replay_to_render(self, frame, replay_path, selected_skin):
+		self.render_list.append({
+			'frame': frame,
+			'replay_path': replay_path,
+			'selected_skin': selected_skin
+		})
+
 	def render_video(self):
 		if self.config.is_db_loading:
 			mb.showwarning(title="Warning!", message="Wait for maps to import to database before rendering!\nClose this window to continue import.")
 			return
-		if not self.config.replay_path:
-			print('No replay file')
-			return
+		if not self.render_list:
+			print('No replays')
 
-		# Create waiting window
-		new_window = tk.Toplevel(self.app)
-		new_window.geometry("600x125")
-		self.app.eval(f'tk::PlaceWindow {str(new_window)} center')
+		for replay_data in self.render_list:
+			self.render_queue.put_nowait(replay_data)
 
-		stage = tk.Label(new_window, text='Starting')
-		stage.place(x=25, y=10)
-
-		curr_map = tk.Label(new_window, text='', width=580)
-		curr_map.place(x=25, y=30)
-
-		progress_bar = ttk.Progressbar(new_window, orient=tk.HORIZONTAL, length=550, value=0, maximum=100)
-		progress_bar.place(x=25, y=60)
-
-		new_window.tkraise()
-		new_window.update_idletasks()
-
-		# Start render as subprocess and read it async.
-		p = subprocess.Popen(f'danser -quickstart \
-			-skin="{self.config.skin_name.get()}" \
-			-replay="{self.config.replay_path}" \
-			-record', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE)
-
-		q = Queue()
-		t = threading.Thread(target=enqueue_output, args=(p.stdout, q))
-		t.daemon = True
-		t.start()
-		
-		# Create render output to tkinter window
-		output = 'Starting'
-		while not 'Finished!' in output:
-			try:
-				output = str(q.get_nowait())
-			except Empty:
-				pass
-			else:
-				print(output)
-				if 'New beatmap found:' in output:
-					stage.config(text='Scanning for new maps')
-					curr_map.config(text=output[58:-1])
-				elif 'Imported:' in output:
-					stage.config(text='Importing new maps')
-					curr_map.config(text=output[49:-8])
-				elif 'Progress:' in output:
-					stage.config(text='Rendering video')
-					progress_bar['value'] = int(re.search("Progress: ([0-9]*)%", output).group(1))
-					curr_map.config(text='')
-				elif 'Finished!' in output:
-					stage.config(text='Finished')	
-
-			new_window.update()
-
-		new_window.destroy()
+		self.render_list = []
 
 	def open_videos_folder(self):
 		_str = "start danser\\videos"

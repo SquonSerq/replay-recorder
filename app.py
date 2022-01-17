@@ -6,8 +6,6 @@ from utils.colors import *
 from utils.controller import Controller
 
 
-
-
 class App(tk.Tk):
 	def __init__(self, *args, **kwargs):
 		tk.Tk.__init__(self, *args, **kwargs)
