@@ -5,7 +5,10 @@ def check_version():
 	with open("version", 'r') as f:
 		ver = str(f.read())
 
-	r = requests.get("https://raw.githubusercontent.com/SquonSerq/replay-recorder/main/version").text
+	try:
+		r = requests.get("https://raw.githubusercontent.com/SquonSerq/replay-recorder/main/version", timeout=2).text
+	except requests.exceptions.Timeout:
+		return True
 
 	if r == ver:
 		return True
