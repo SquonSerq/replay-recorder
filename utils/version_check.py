@@ -1,5 +1,6 @@
 import requests
 
+
 def check_version():
 	try:
 		r = requests.get("https://raw.githubusercontent.com/SquonSerq/replay-recorder/main/version", timeout=2).text
@@ -13,6 +14,3 @@ def check_version():
 	if r == ver:
 		return True
 	return False
-
-
-	

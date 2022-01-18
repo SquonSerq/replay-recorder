@@ -31,15 +31,15 @@ class MainMenu(tk.Frame):
 				replay_popup_titlebar = tk.Frame(replay_popup, height=30, **frame_lg_bg_style)
 				replay_popup_titlebar.pack(side=tk.TOP, fill=tk.X)
 				replay_popup_titlebar.pack_propagate(0)
-				frame_name = tk.Label(replay_popup_titlebar, text='Add replay', **label_lg_bg_style)
+				frame_name = tk.Label(replay_popup_titlebar, text='Add replay', **label_lg_style)
 				frame_name.pack(side=tk.LEFT, padx=10)
 				close_button = tk.Button(replay_popup_titlebar, text='✕', command=replay_popup.destroy, **button_titlebar_style)
 				close_button.pack(side=tk.RIGHT)
 
-				loading = tk.Label(replay_popup, text='LOADING', **label_lg_bg_style)
+				loading = tk.Label(replay_popup, text='LOADING', **label_lg_style)
 				loading.pack(side=tk.TOP, anchor=tk.CENTER)
 
-				beatmap_data = self.controller.get_beatmap_data(replay_data.beatmap_hash)
+				beatmap_data = self.controller.dao.get_beatmap_data(replay_data.beatmap_hash)
 				print(f'{beatmap_data[0]} - {beatmap_data[1]}[{beatmap_data[2]}].',
 				      f'Played by {replay_data.player_name} on {replay_data.timestamp}')
 				
@@ -55,13 +55,13 @@ class MainMenu(tk.Frame):
 				photo = tk.Label(map_info, image=image_tk, **borderless)
 				photo.image = image_tk
 				photo.pack(side=tk.TOP, pady=10)
-				tk.Label(map_info, text=f'Played by {replay_data.player_name} on {replay_data.timestamp}', **borderless, **label_dg_bg_style).pack(side=tk.BOTTOM, fill=tk.BOTH, pady=10)
-				tk.Label(map_info, text=f'{beatmap_data[0]} - {beatmap_data[1]} [{beatmap_data[2]}]', **borderless, **label_dg_bg_style).pack(side=tk.BOTTOM, fill=tk.BOTH)
+				tk.Label(map_info, text=f'Played by {replay_data.player_name} on {replay_data.timestamp}', **borderless, **label_dg_style).pack(side=tk.BOTTOM, fill=tk.BOTH, pady=10)
+				tk.Label(map_info, text=f'{beatmap_data[0]} - {beatmap_data[1]} [{beatmap_data[2]}]', **borderless, **label_dg_style).pack(side=tk.BOTTOM, fill=tk.BOTH)
 
 				replay_popup_skin = tk.Frame(replay_popup,  height=50, **frame_lg_bg_style)
 				replay_popup_skin.pack(side=tk.TOP, fill=tk.X)
 				replay_popup_skin.pack_propagate(0)
-				tk.Label(replay_popup_skin, text='Selected skin', **label_lg_bg_style).pack(side=tk.LEFT, padx=25)
+				tk.Label(replay_popup_skin, text='Selected skin', **label_lg_style).pack(side=tk.LEFT, padx=25)
 
 				def update_skin_selector(event):
 					if self.controller.config.is_dirs_valid():
@@ -91,11 +91,11 @@ class MainMenu(tk.Frame):
 					q_text_frame = tk.Frame(q_frame, **frame_lg_bg_style)
 					q_text_frame.pack(side=tk.LEFT, anchor=tk.NW, padx=5, pady=5)
 
-					tk.Label(q_text_frame, text=f'{beatmap_data[0]} - {beatmap_data[1]} [{beatmap_data[2]}]', **borderless, **label_lg_bg_style).pack(side=tk.TOP, anchor=tk.W, pady=10)
-					tk.Label(q_text_frame, text=f'Played by {replay_data.player_name} on {replay_data.timestamp}', **borderless, **label_lg_bg_style).pack(side=tk.TOP, anchor=tk.W, pady=10)
+					tk.Label(q_text_frame, text=f'{beatmap_data[0]} - {beatmap_data[1]} [{beatmap_data[2]}]', **borderless, **label_lg_style).pack(side=tk.TOP, anchor=tk.W, pady=10)
+					tk.Label(q_text_frame, text=f'Played by {replay_data.player_name} on {replay_data.timestamp}', **borderless, **label_lg_style).pack(side=tk.TOP, anchor=tk.W, pady=10)
 					
 					ttk.Progressbar(q_frame, orient=tk.HORIZONTAL, value=0, maximum=100).pack(side=tk.RIGHT, anchor=tk.NW, padx=10, pady=15)
-					self.controller.add_replay_to_render(q_frame, file.name, skin_name.get())
+					self.controller.renderer.add_replay_to_render(q_frame, file.name, skin_name.get())
 					replay_popup.destroy()
 
 				tk.Button(replay_popup_skin, text='Add replay', command=lambda: add_replay_to_list(), **button_style_popup).pack(side=tk.RIGHT, padx=25)
@@ -109,7 +109,7 @@ class MainMenu(tk.Frame):
 		frame_with_buttons.pack(side=tk.TOP, fill=tk.X)
 		frame_with_buttons.pack_propagate(0)
 		tk.Button(frame_with_buttons, text='Add replay', command=lambda: choose_replay(), **button_style).pack(side=tk.LEFT, padx=1)
-		tk.Button(frame_with_buttons, text='Render video', command=lambda: controller.render_video(), **button_style).pack(side=tk.LEFT, padx=1)
+		tk.Button(frame_with_buttons, text='Render video', command=lambda: controller.start_render_if_db_loaded(), **button_style).pack(side=tk.LEFT, padx=1)
 		tk.Button(frame_with_buttons, text="Open videos folder", command=lambda: controller.open_videos_folder(), **button_style).pack(side=tk.LEFT, padx=1)
 		tk.Button(frame_with_buttons, text='Settings', command=lambda: controller.show_frame('Settings'), **button_style).pack(side=tk.LEFT, padx=1)
 
@@ -120,8 +120,8 @@ class MainMenu(tk.Frame):
 		q_replays_labels_frame = tk.Frame(replays_frame, height=30, **frame_lg_bg_style)
 		q_replays_labels_frame.pack(side=tk.TOP, fill=tk.X)
 		q_replays_labels_frame.pack_propagate(0) 
-		tk.Label(q_replays_labels_frame, text='Selected replays', **label_lg_bg_style).pack(side=tk.LEFT, anchor=tk.N, padx=35, pady=5)
-		tk.Label(q_replays_labels_frame, text='Render progress', **label_lg_bg_style).pack(side=tk.RIGHT, anchor=tk.N, padx=45, pady=5)
+		tk.Label(q_replays_labels_frame, text='Selected replays', **label_lg_style).pack(side=tk.LEFT, anchor=tk.N, padx=35, pady=5)
+		tk.Label(q_replays_labels_frame, text='Render progress', **label_lg_style).pack(side=tk.RIGHT, anchor=tk.N, padx=45, pady=5)
 
 		q_replays_frame = tk.Frame(replays_frame, width=750, height=450, **frame_dg_bg_style) 
 		q_replays_frame.pack(side=tk.TOP, anchor=tk.CENTER)

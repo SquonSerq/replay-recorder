@@ -1,5 +1,4 @@
 import tkinter as tk
-import tkinter.ttk as ttk
 from os import path
 import subprocess
 import json
@@ -7,6 +6,7 @@ import threading
 from queue import Queue, Empty
 
 from utils.read_queue import enqueue_output
+
 
 class Config:
 	def __init__(self, controller_context):

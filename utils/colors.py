@@ -14,12 +14,12 @@ frame_dg_bg_style = {
 	"background": dark_gray
 }
 
-label_lg_bg_style = {
+label_lg_style = {
 	"background": light_gray,
 	"fg": light_white
 }
 
-label_dg_bg_style = {
+label_dg_style = {
 	"background": dark_gray,
 	"fg": light_white
 }
