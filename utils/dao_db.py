@@ -1,7 +1,7 @@
 import sqlite3
 
 
-class Dao():
+class DaoDB():
     def __init__(self):
         super().__init__()
         self.database = sqlite3.connect("./danser/danser.db")

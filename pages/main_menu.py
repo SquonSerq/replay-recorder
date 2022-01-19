@@ -39,7 +39,7 @@ class MainMenu(tk.Frame):
 				loading = tk.Label(replay_popup, text='LOADING', **label_lg_style)
 				loading.pack(side=tk.TOP, anchor=tk.CENTER)
 
-				beatmap_data = self.controller.dao.get_beatmap_data(replay_data.beatmap_hash)
+				beatmap_data = self.controller.db.get_beatmap_data(replay_data.beatmap_hash)
 				print(f'{beatmap_data[0]} - {beatmap_data[1]}[{beatmap_data[2]}].',
 				      f'Played by {replay_data.player_name} on {replay_data.timestamp}')
 				
@@ -95,7 +95,7 @@ class MainMenu(tk.Frame):
 					tk.Label(q_text_frame, text=f'Played by {replay_data.player_name} on {replay_data.timestamp}', **borderless, **label_lg_style).pack(side=tk.TOP, anchor=tk.W, pady=10)
 					
 					ttk.Progressbar(q_frame, orient=tk.HORIZONTAL, value=0, maximum=100).pack(side=tk.RIGHT, anchor=tk.NW, padx=10, pady=15)
-					self.controller.renderer.add_replay_to_render(q_frame, file.name, skin_name.get())
+					self.controller.renderer.add_replay(q_frame, file.name, skin_name.get())
 					replay_popup.destroy()
 
 				tk.Button(replay_popup_skin, text='Add replay', command=lambda: add_replay_to_list(), **button_style_popup).pack(side=tk.RIGHT, padx=25)
@@ -109,7 +109,7 @@ class MainMenu(tk.Frame):
 		frame_with_buttons.pack(side=tk.TOP, fill=tk.X)
 		frame_with_buttons.pack_propagate(0)
 		tk.Button(frame_with_buttons, text='Add replay', command=lambda: choose_replay(), **button_style).pack(side=tk.LEFT, padx=1)
-		tk.Button(frame_with_buttons, text='Render video', command=lambda: controller.start_render_if_db_loaded(), **button_style).pack(side=tk.LEFT, padx=1)
+		tk.Button(frame_with_buttons, text='Render video', command=lambda: controller.start_render(), **button_style).pack(side=tk.LEFT, padx=1)
 		tk.Button(frame_with_buttons, text="Open videos folder", command=lambda: controller.open_videos_folder(), **button_style).pack(side=tk.LEFT, padx=1)
 		tk.Button(frame_with_buttons, text='Settings', command=lambda: controller.show_frame('Settings'), **button_style).pack(side=tk.LEFT, padx=1)
 

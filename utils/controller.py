@@ -5,14 +5,14 @@ from models.config import Config
 from pages.main_menu import MainMenu
 from pages.settings import Settings
 from utils.renderer import Renderer
-from utils.dao import Dao
+from utils.dao_db import DaoDB
 
 
 class Controller():
 	def __init__(self, container, app_context):
 		self.app = app_context
 		self.config = Config(self)
-		self.dao = Dao()
+		self.db = DaoDB()
 
 		self.renderer = Renderer()
 		self.renderer.daemon = True
@@ -37,12 +37,12 @@ class Controller():
 		self.set_window_size(frame.window_size[0], frame.window_size[1])
 		frame.tkraise()
 	
-	def start_render_if_db_loaded(self):
+	def start_render(self):
 		if self.config.is_db_loading:
 			mb.showwarning(title="Warning!", message="Wait for maps to import to database before rendering!\nClose this window to continue import.")
 			return
 
-		self.renderer.render_video()
+		self.renderer.move_added_replays_to_queue()
 
 	def open_videos_folder(self):
 		_str = "start danser\\videos"
