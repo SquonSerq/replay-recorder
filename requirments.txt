@@ -1,2 +1,2 @@
-osrparse==6.0.0
+osrparse==5.0.0
 requests==2.27.1

@@ -1,5 +1,4 @@
-from tkinter import *
-from tkinter.ttk import *
+import tkinter as tk
 from os import path
 import subprocess
 import json
@@ -8,13 +7,12 @@ from queue import Queue, Empty
 
 from utils.read_queue import enqueue_output
 
+
 class Config:
 	def __init__(self, controller_context):
 		self.controller = controller_context
 		self.__is_config_exist = True
 		self.is_db_loading = False
-		self.replay_path = ''
-		self.skin_name = StringVar()
 		self.danser_config = {}
 
 		self.load_config()
@@ -23,37 +21,37 @@ class Config:
 		self.settings_vars = {
 			"SnakingIn": {
 				"setting_name": "Sliders snake in",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Objects']['Sliders']['Snaking'],
 				"field": "In"
 			},
 			"SnakingOut": {
 				"setting_name": "Sliders snake out",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Objects']['Sliders']['Snaking'],
 				"field": "Out"
 			},
 			"CursorRipples": {
 				"setting_name": "Waves on cursor click",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Cursor'],
 				"field": "CursorRipples"
 			},
 			"ButtonClicks": {
 				"setting_name": "Show clicked buttons",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Gameplay']['KeyOverlay'],
 				"field": "Show"
 			},
 			"StrainGraph": {
 				"setting_name": "Show strain graph",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Gameplay']['StrainGraph'],
 				"field": "Show"
 			},
 			"PPCounter": {
 				"setting_name": "Show PP counter",
-				"type": BooleanVar,
+				"type": tk.BooleanVar,
 				"root": self.danser_config['Gameplay']['PPCounter'],
 				"field": "Show"
 			}
@@ -91,14 +89,14 @@ class Config:
 		self.is_db_loading = True
 
 		# Create db import window
-		new_window = Toplevel(self.controller.app)
+		new_window = tk.Toplevel(self.controller.app)
 		new_window.title("Importing maps to database")
 		new_window.geometry("600x50")
 
-		stage = Label(new_window, text='Starting')
+		stage = tk.Label(new_window, text='Starting')
 		stage.place(x=25, y=10)
 
-		curr_map = Label(new_window, text='', width=580)
+		curr_map = tk.Label(new_window, text='', width=580)
 		curr_map.place(x=25, y=30)
 
 		new_window.tkraise()
