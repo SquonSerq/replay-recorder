@@ -37,12 +37,12 @@ class Controller():
 		self.set_window_size(frame.window_size[0], frame.window_size[1])
 		frame.tkraise()
 	
-	def start_render(self):
+	def add_replay_to_queue(self, replay_data):
 		if self.config.is_db_loading:
 			mb.showwarning(title="Warning!", message="Wait for maps to import to database before rendering!\nClose this window to continue import.")
 			return
 
-		self.renderer.move_added_replays_to_queue()
+		self.renderer.add_replay_to_queue(replay_data)
 
 	def open_videos_folder(self):
 		_str = "start danser\\videos"

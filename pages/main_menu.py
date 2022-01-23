@@ -95,10 +95,10 @@ class MainMenu(tk.Frame):
 					tk.Label(q_text_frame, text=f'Played by {replay_data.player_name} on {replay_data.timestamp}', **borderless, **label_lg_style).pack(side=tk.TOP, anchor=tk.W, pady=10)
 					
 					ttk.Progressbar(q_frame, orient=tk.HORIZONTAL, value=0, maximum=100).pack(side=tk.RIGHT, anchor=tk.NW, padx=10, pady=15)
-					self.controller.renderer.add_replay(q_frame, file.name, skin_name.get())
+					self.controller.add_replay_to_queue((q_frame, file.name, skin_name.get()))
 					replay_popup.destroy()
 
-				tk.Button(replay_popup_skin, text='Add replay', command=lambda: add_replay_to_list(), **button_style_popup).pack(side=tk.RIGHT, padx=25)
+				tk.Button(replay_popup_skin, text='Render video', command=lambda: add_replay_to_list(), **button_style_popup).pack(side=tk.RIGHT, padx=25)
 		
 		# Frame for control buttons and render queue
 		background = tk.Frame(self, height=600, **frame_lg_bg_style)
@@ -109,9 +109,8 @@ class MainMenu(tk.Frame):
 		frame_with_buttons.pack(side=tk.TOP, fill=tk.X)
 		frame_with_buttons.pack_propagate(0)
 		tk.Button(frame_with_buttons, text='Add replay', command=lambda: choose_replay(), **button_style).pack(side=tk.LEFT, padx=1)
-		tk.Button(frame_with_buttons, text='Render video', command=lambda: controller.start_render(), **button_style).pack(side=tk.LEFT, padx=1)
 		tk.Button(frame_with_buttons, text="Open videos folder", command=lambda: controller.open_videos_folder(), **button_style).pack(side=tk.LEFT, padx=1)
-		tk.Button(frame_with_buttons, text='Settings', command=lambda: controller.show_frame('Settings'), **button_style).pack(side=tk.LEFT, padx=1)
+		tk.Button(frame_with_buttons, text='Settings', command=lambda: controller.show_frame('Settings'), **button_style).pack(side=tk.RIGHT, padx=1)
 
 		replays_frame = tk.Frame(background, width=800, height=540,  **frame_lg_bg_style)
 		replays_frame.pack(side=tk.TOP)
@@ -120,7 +119,7 @@ class MainMenu(tk.Frame):
 		q_replays_labels_frame = tk.Frame(replays_frame, height=30, **frame_lg_bg_style)
 		q_replays_labels_frame.pack(side=tk.TOP, fill=tk.X)
 		q_replays_labels_frame.pack_propagate(0) 
-		tk.Label(q_replays_labels_frame, text='Selected replays', **label_lg_style).pack(side=tk.LEFT, anchor=tk.N, padx=35, pady=5)
+		tk.Label(q_replays_labels_frame, text='Added replays', **label_lg_style).pack(side=tk.LEFT, anchor=tk.N, padx=35, pady=5)
 		tk.Label(q_replays_labels_frame, text='Render progress', **label_lg_style).pack(side=tk.RIGHT, anchor=tk.N, padx=45, pady=5)
 
 		q_replays_frame = tk.Frame(replays_frame, width=750, height=450, **frame_dg_bg_style) 
