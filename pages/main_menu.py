@@ -6,6 +6,7 @@ from os import listdir
 
 from utils.colors import *
 from utils.image_loader import *
+from utils.widgets import DraggableWindow
 
 
 class MainMenu(tk.Frame):
@@ -24,17 +25,9 @@ class MainMenu(tk.Frame):
 					# Not replay selected
 					return
 
-				replay_popup = tk.Frame(self, width=500, height=250, **frame_dg_bg_style, **frame_border)
-				replay_popup.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-				replay_popup.pack_propagate(0)
-
-				replay_popup_titlebar = tk.Frame(replay_popup, height=30, **frame_lg_bg_style)
-				replay_popup_titlebar.pack(side=tk.TOP, fill=tk.X)
-				replay_popup_titlebar.pack_propagate(0)
-				frame_name = tk.Label(replay_popup_titlebar, text='Add replay', **label_lg_style)
-				frame_name.pack(side=tk.LEFT, padx=10)
-				close_button = tk.Button(replay_popup_titlebar, text='✕', command=replay_popup.destroy, **button_titlebar_style)
-				close_button.pack(side=tk.RIGHT)
+				replay_popup = tk.Toplevel()
+				replay_popup.grab_set()
+				DraggableWindow(replay_popup, 500, 250, 'Add Replay')
 
 				loading = tk.Label(replay_popup, text='LOADING', **label_lg_style)
 				loading.pack(side=tk.TOP, anchor=tk.CENTER)
