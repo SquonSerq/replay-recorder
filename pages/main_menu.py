@@ -6,7 +6,7 @@ from os import listdir
 
 from utils.colors import *
 from utils.image_loader import *
-from utils.widgets import DraggableWindow
+from utils.widgets import DraggableWindow, ScrolledWindow
 
 
 class MainMenu(tk.Frame):
@@ -29,14 +29,9 @@ class MainMenu(tk.Frame):
 				replay_popup.grab_set()
 				DraggableWindow(replay_popup, 500, 250, 'Add Replay')
 
-				loading = tk.Label(replay_popup, text='LOADING', **label_lg_style)
-				loading.pack(side=tk.TOP, anchor=tk.CENTER)
-
 				beatmap_data = self.controller.db.get_beatmap_data(replay_data.beatmap_hash)
 				print(f'{beatmap_data[0]} - {beatmap_data[1]}[{beatmap_data[2]}].',
 				      f'Played by {replay_data.player_name} on {replay_data.timestamp}')
-				
-				loading.destroy()
 
 				map_info = tk.Frame(replay_popup, height=170, **frame_dg_bg_style)
 				map_info.pack(side=tk.TOP, fill=tk.X)
@@ -73,7 +68,7 @@ class MainMenu(tk.Frame):
 				skin_selector.pack(side=tk.LEFT)
 
 				def add_replay_to_list():
-					q_frame = tk.Frame(q_replays_frame, width=740, height=100, **frame_lg_bg_style)
+					q_frame = tk.Frame(scrollable_replays_frame.replays, width=750, height=100, **frame_lg_bg_style)
 					q_frame.pack(side=tk.TOP, pady=5)
 					q_frame.pack_propagate(0)
 
@@ -105,16 +100,20 @@ class MainMenu(tk.Frame):
 		tk.Button(frame_with_buttons, text="Open videos folder", command=lambda: controller.open_videos_folder(), **button_style).pack(side=tk.LEFT, padx=1)
 		tk.Button(frame_with_buttons, text='Settings', command=lambda: controller.show_frame('Settings'), **button_style).pack(side=tk.RIGHT, padx=1)
 
-		replays_frame = tk.Frame(background, width=800, height=540,  **frame_lg_bg_style)
-		replays_frame.pack(side=tk.TOP)
+		middle_frame = tk.Frame(background, width=800, height=540,  **frame_lg_bg_style)
+		middle_frame.pack(side=tk.TOP)
+		middle_frame.pack_propagate(0)
+
+		replays_labels_frame = tk.Frame(middle_frame, height=30, **frame_lg_bg_style)
+		replays_labels_frame.pack(side=tk.TOP, fill=tk.X)
+		replays_labels_frame.pack_propagate(0) 
+		tk.Label(replays_labels_frame, text='Added replays', **label_lg_style).pack(side=tk.LEFT, anchor=tk.N, padx=35, pady=5)
+		tk.Label(replays_labels_frame, text='Render progress', **label_lg_style).pack(side=tk.RIGHT, anchor=tk.N, padx=60, pady=5)
+
+		replays_frame = tk.Frame(middle_frame, width=800, height=540, **frame_dg_bg_style, **frame_dark_border) 
+		replays_frame.pack(side=tk.TOP, anchor=tk.CENTER)
 		replays_frame.pack_propagate(0)
 
-		q_replays_labels_frame = tk.Frame(replays_frame, height=30, **frame_lg_bg_style)
-		q_replays_labels_frame.pack(side=tk.TOP, fill=tk.X)
-		q_replays_labels_frame.pack_propagate(0) 
-		tk.Label(q_replays_labels_frame, text='Added replays', **label_lg_style).pack(side=tk.LEFT, anchor=tk.N, padx=35, pady=5)
-		tk.Label(q_replays_labels_frame, text='Render progress', **label_lg_style).pack(side=tk.RIGHT, anchor=tk.N, padx=45, pady=5)
-
-		q_replays_frame = tk.Frame(replays_frame, width=750, height=450, **frame_dg_bg_style) 
-		q_replays_frame.pack(side=tk.TOP, anchor=tk.CENTER)
-		q_replays_frame.pack_propagate(0)
+		scrollable_replays_frame = ScrolledWindow(replays_frame, width=800, height=540, **frame_dg_bg_style)
+		scrollable_replays_frame.pack(padx=5)
+		scrollable_replays_frame.pack_propagate(0)
