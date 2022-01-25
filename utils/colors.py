@@ -24,9 +24,23 @@ label_dg_style = {
 	"fg": light_white
 }
 
-frame_border = {
+frame_light_border = {
 	"highlightthickness": 1,
 	"highlightbackground": light_white
+}
+
+frame_dark_border = {
+	"highlightthickness": 5,
+	"highlightbackground": dark_gray
+}
+
+scrolview_style = {
+	"background": "Green", 
+	"darkcolor": "DarkGreen", 
+	"lightcolor": "LightGreen",
+	"troughcolor": "gray", 
+	"bordercolor": "blue", 
+	"arrowcolor": "white"
 }
 
 button_style = {
